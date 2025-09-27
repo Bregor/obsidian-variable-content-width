@@ -1,0 +1,393 @@
+/* ==========================================================================
+   Variable Content Width (VCW)
+   Version: 0.1.0
+   Author: Maxim Filatov <pipopolam@gmail.com>
+   Purpose: Make Obsidian's content area width adaptive, configurable via
+            Style Settings plugin, and responsive to pane splits.
+   ==========================================================================
+*/
+
+/* -------------------------------
+   Root variables (Style Settings)
+   -------------------------------
+   These variables are controlled from the Style Settings plugin. Defaults
+   are provided here, but will be overwritten by user selections.
+*/
+:root {
+  --vcw-set-min-width: 720px; /* Smallest allowed width (readability floor) */
+  --vcw-set-readable-width: 85cqi; /* Ideal width (responsive, based on pane size) */
+  --vcw-set-max-width: 100cqi; /* Largest allowed width (full pane) */
+
+  --vcw-set-h1-scale: 1.2; /* H1 headings narrower: higher = narrower */
+  --vcw-set-h2-scale: 1.15; /* H2 headings slightly wider than H1 */
+  --vcw-set-h3-scale: 1.05; /* H3 headings slightly wider than H2 */
+
+  --vcw-set-callout-scale: 1.2; /* Callouts narrower than body text */
+  --vcw-set-padding-scale: 1; /* Multiplier for padding in wide mode */
+}
+
+/* ============================================================
+   DESKTOP (≥ 1024px). Mobile devices follow theme defaults.
+   ============================================================ */
+@media (min-width: 1024px) {
+  /* -------------------------
+     Define layout containers
+     -------------------------
+     Required so `cqi` units are calculated per pane (important for
+     split view). Without this, cqi = viewport width (bad for side-by-side).
+  */
+  .markdown-source-view.mod-cm6,
+  .markdown-preview-view {
+    container-name: content-view;
+    container-type: inline-size;
+  }
+
+  /* ======================================================
+     READABLE LINE LENGTH: ON
+     ======================================================
+     Applies when Obsidian’s “Readable line length” toggle
+     is enabled in Settings → Editor → Display.
+     Goal: center the text column with proper constraints.
+  */
+  .markdown-preview-view.is-readable-line-width .markdown-preview-sizer {
+    min-width: var(--vcw-set-min-width);
+    width: var(--vcw-set-readable-width);
+    max-width: var(--vcw-set-max-width);
+    margin-inline: auto;
+    padding-inline: 0;
+
+    /* These variables are used by Obsidian core/other themes
+       to align elements like tables, callouts, etc. */
+    --file-line-width: clamp(
+      var(--vcw-set-min-width),
+      var(--vcw-set-readable-width),
+      var(--vcw-set-max-width)
+    );
+    --line-width: var(--file-line-width);
+  }
+
+  .markdown-source-view.mod-cm6.is-readable-line-width .cm-sizer {
+    min-width: var(--vcw-set-min-width);
+    width: var(--vcw-set-readable-width);
+    max-width: var(--vcw-set-max-width);
+    margin-inline: auto;
+
+    --file-line-width: clamp(
+      var(--vcw-set-min-width),
+      var(--vcw-set-readable-width),
+      var(--vcw-set-max-width)
+    );
+    --line-width: var(--file-line-width);
+  }
+
+  .markdown-source-view.mod-cm6.is-readable-line-width .cm-scroller {
+    padding-inline: 0; /* remove double-padding that some themes add */
+  }
+
+  /* ======================================================
+     READABLE LINE LENGTH: OFF
+     ======================================================
+     Applies when the toggle is OFF.
+     Goal: content flows wide, but keep balanced padding
+     instead of hugging the pane edges.
+  */
+  .markdown-preview-view:not(.is-readable-line-width),
+  .view-content
+    > .markdown-source-view:not(.is-readable-line-width).mod-cm6
+    > .cm-editor
+    > .cm-scroller {
+    /* padding = leftover space / 2, scaled by user multiplier */
+    padding-inline: max(
+      0px,
+      calc(
+        (
+            100cqi -
+              clamp(
+                var(--vcw-set-min-width),
+                var(--vcw-set-readable-width),
+                var(--vcw-set-max-width)
+              )
+          ) /
+          2
+      )
+    ) !important;
+  }
+
+  /* Ensure embedded tables in wide mode use full available space */
+  .markdown-preview-view:not(.is-readable-line-width) .el-table table {
+    width: 100cqi;
+    margin-inline: 0;
+  }
+
+  /* ======================================================
+     ENHANCED TYPOGRAPHY
+     ======================================================
+     Headings and callouts are intentionally narrower than
+     body text, for better balance and hierarchy.
+  */
+  .markdown-preview-view div.el-h1,
+  .markdown-source-view.mod-cm6 .HyperMD-header.HyperMD-header-1 {
+    max-width: calc(
+      clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        ) /
+        var(--vcw-set-h1-scale)
+    );
+    margin-inline: 0 !important;
+  }
+
+  .markdown-preview-view div.el-h2,
+  .markdown-source-view.mod-cm6 .HyperMD-header.HyperMD-header-2 {
+    max-width: calc(
+      clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        ) /
+        var(--vcw-set-h2-scale)
+    );
+    margin-inline: 0 !important;
+  }
+
+  .markdown-preview-view div.el-h3,
+  .markdown-source-view.mod-cm6 .HyperMD-header.HyperMD-header-3 {
+    max-width: calc(
+      clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        ) /
+        var(--vcw-set-h3-scale)
+    );
+    margin-inline: 0 !important;
+  }
+
+  .markdown-preview-view div.callout {
+    max-width: calc(
+      clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        ) /
+        var(--vcw-set-callout-scale)
+    );
+    margin-inline: 0 !important;
+  }
+
+  /* ======================================================
+     RESPONSIVE ELEMENTS
+     ======================================================
+     Tables, code blocks, diagrams, etc. adapt based on
+     container size.
+  */
+  @container content-view (min-width: 900px) {
+    /* Slightly wider tables on medium+ panes */
+    .markdown-rendered .block-language-dataview table,
+    .markdown-rendered table {
+      width: min(
+        100cqi,
+        clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        )
+      );
+      margin-inline: auto;
+    }
+  }
+
+  @container content-view (min-width: 1200px) {
+    /* Full-width content on large panes */
+    .markdown-rendered .block-language-dataview table,
+    .markdown-rendered table,
+    .markdown-rendered .callout[data-callout="wide"],
+    .markdown-rendered .wide-content,
+    .markdown-rendered img[alt*="wide"] {
+      width: clamp(
+        var(--vcw-set-min-width),
+        var(--vcw-set-readable-width),
+        var(--vcw-set-max-width)
+      );
+      margin-inline: auto;
+    }
+
+    /* Code blocks centered with breathing room */
+    .markdown-rendered pre {
+      margin-inline: auto;
+    }
+
+    /* Mermaid diagrams centered */
+    .markdown-rendered .mermaid {
+      width: clamp(
+        var(--vcw-set-min-width),
+        var(--vcw-set-readable-width),
+        var(--vcw-set-max-width)
+      );
+      margin-inline: auto;
+    }
+  }
+}
+
+/* ============================================================
+   MOBILE (≤ 1023px).
+   ============================================================
+   Simpler: small consistent padding, and force table scroll
+   instead of overflow breaking layout.
+*/
+@media (max-width: 1023px) {
+  .markdown-preview-view,
+  .markdown-source-view.mod-cm6 {
+    padding-inline: clamp(16px, 4vw, 24px);
+  }
+
+  .markdown-rendered table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .markdown-preview-view.is-readable-line-width .markdown-preview-sizer,
+  .markdown-source-view.mod-cm6.is-readable-line-width .cm-sizer {
+    outline: 1px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================================
+   PRINT
+   ============================================================
+   For PDF/print export, remove width constraints entirely.
+*/
+@media print {
+  .markdown-preview-view .markdown-preview-sizer,
+  .markdown-source-view.mod-cm6 .cm-sizer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* ============================================================
+   STYLE SETTINGS SCHEMA
+   ============================================================
+   This section makes all VCW variables visible and configurable
+   in the Style Settings plugin UI.
+*/
+/* @settings
+name: Variable Content Width
+id: variable-content-width
+settings:
+  - id: vcw-main-heading
+    title: Content Width Settings
+    description: Configure how your content is displayed across different screen sizes
+    type: heading
+    level: 1
+
+  - id: vcw-set-readable-width
+    title: Readable width
+    description: "Main content width. Use 85cqi for responsive (recommended) or fixed px values like 800px"
+    type: variable-text
+    scope: root
+    default: 85cqi
+
+  - id: vcw-bounds-heading
+    title: Width Constraints
+    description: Set boundaries for your content width
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-min-width
+    title: Minimum width
+    description: "Smallest allowed width to maintain readability (e.g., 720px)"
+    type: variable-text
+    scope: root
+    default: 720px
+
+  - id: vcw-set-max-width
+    title: Maximum width
+    description: "Largest allowed width. Use 100cqi for full pane or px limit like 1200px"
+    type: variable-text
+    scope: root
+    default: 100cqi
+
+  - id: vcw-typography-heading
+    title: Typography
+    description: Control heading appearance and hierarchy
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-h1-scale
+    title: H1 width scale
+    description: "How much narrower H1 headings should be. Higher = narrower (1.2 ≈ 70% width)"
+    type: variable-number-slider
+    scope: root
+    default: 1.2
+    min: 1
+    max: 2
+    step: 0.1
+
+  - id: vcw-set-h2-scale
+    title: H2 width scale
+    description: "How much narrower H2 headings should be. Usually slightly wider than H1"
+    type: variable-number-slider
+    scope: root
+    default: 1.15
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-h3-scale
+    title: H3 width scale
+    description: "How much narrower H3 headings should be. Usually slightly wider than H2"
+    type: variable-number-slider
+    scope: root
+    default: 1.05
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-callout-scale
+    title: Callout width scale
+    description: "How much narrower callouts should be. Usually slightly wider than H2"
+    type: variable-number-slider
+    scope: root
+    default: 1.2
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-advanced-heading
+    title: Advanced
+    description: Fine-tune spacing and layout behavior
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-padding-scale
+    title: Side padding multiplier
+    description: "Adjust side padding in wide mode. 0.5 = tighter, 1.5 = more spacious"
+    type: variable-number-slider
+    scope: root
+    default: 1
+    min: 0
+    max: 2
+    step: 0.1
+*/
