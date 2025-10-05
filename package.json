@@ -1,6 +1,6 @@
 {
   "name": "obsidian-vcw",
-  "version": "0.2.0-dev",
+  "version": "0.2.1",
   "description": "Variable Content Width CSS for Obsidian",
   "author": "Maxim Filatov <pipopolam@gmail.com>",
   "license": "MIT",

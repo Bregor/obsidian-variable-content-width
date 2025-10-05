@@ -5,7 +5,7 @@ All notable changes to the Variable Content Width snippet will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - TBD
+## [0.2.1] - 2025-10-05
 
 ### Changed
 - **Build System**: Migrated to PostCSS-based modular architecture
@@ -71,11 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Future Releases
 
 ### Planned for v0.2.0
-- [ ] Enhanced tablet/iPad specific responsive breakpoints
-- [ ] Additional element types for responsive behavior
-- [ ] Debug mode with visual content boundaries
-- [ ] Theme-specific compatibility improvements
-- [ ] Performance optimizations for complex documents
+- [x] Additional element types for responsive behavior
+- [x] Debug mode with visual content boundaries
+- [x] Theme-specific compatibility improvements
 
 ---
 
