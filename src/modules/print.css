@@ -1,0 +1,9 @@
+@media print {
+  .markdown-preview-view .markdown-preview-sizer,
+  .markdown-source-view.mod-cm6 .cm-sizer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

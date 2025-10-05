@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build CSS
+      run: npm run build
+
+    - name: Verify build
+      run: |
+        if [ ! -f variable-content-width.css ]; then
+          echo "Error: Built CSS file not found"
+          exit 1
+        fi
+        SIZE=$(wc -c < variable-content-width.css)
+        echo "Build successful, file size: $SIZE bytes"
+
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          variable-content-width.css
+        body: |
+          ## Installation
+
+          Download `variable-content-width.css` and place it in your Obsidian snippets folder:
+          1. Open Obsidian Settings → Appearance → CSS Snippets
+          2. Click the folder icon to open snippets folder
+          3. Place `variable-content-width.css` in the folder
+          4. Refresh the snippets list and enable "Variable Content Width"
+
+          See [README.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md) for full documentation.
+
+          ## What's Changed
+          See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md) for details.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,84 @@
+/* ==========================================================================
+   SOURCE rules
+   Containers (defined in _containers.css):
+     - source-view      → .markdown-source-view.mod-cm6 (top level)
+     - source-readable  → .cm-sizer (only when Readable Line Length ON)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Readable Line Length ON */
+
+  /*
+    When Readable Line Length ON — restrict .cm-sizer and
+    expose --file-line-width for compatibility.
+  */
+  @container source-content (min-width: 0) {
+    .HyperMD-header.HyperMD-header-1 {
+      max-width: calc(100cqi / var(--vcw-set-h1-scale));
+      margin-inline: 0 !important;
+    }
+    .HyperMD-header.HyperMD-header-2 {
+      max-width: calc(100cqi / var(--vcw-set-h2-scale));
+      margin-inline: 0 !important;
+    }
+    .HyperMD-header.HyperMD-header-3 {
+      max-width: calc(100cqi / var(--vcw-set-h3-scale));
+      margin-inline: 0 !important;
+    }
+    .table-wrapper {
+      padding-inline: 0 !important;
+      max-width: var(--table-max-width);
+      margin-inline: auto;
+    }
+    .table-wrapper > .table-editor {
+      max-width: var(--table-max-width);
+      width: var(--table-width);
+      margin-inline: 0 !important;
+    }
+  }
+
+  /* Readable Line Length OFF */
+
+  /* No string length restrictions: symmetrical padding to the scroller. */
+  @container source-view (min-width: 0) {
+    .markdown-source-view.mod-cm6:not(.is-readable-line-width)
+      > .cm-editor
+      > .cm-scroller {
+      padding-inline: max(
+        0px,
+        calc(
+          (
+              100cqi -
+                clamp(
+                  var(--vcw-set-min-width),
+                  var(--vcw-set-readable-width),
+                  var(--vcw-set-max-width)
+                )
+            ) /
+            2 * var(--vcw-set-padding-scale)
+        )
+      );
+    }
+  }
+
+  /* Narrow panel (vertical split < min-width) */
+
+  /*
+    If the panel is already at its minimum size, remove max-width and increase the internal margins
+    so that the gutters/line numbering do not "eat up" the content.
+  */
+  @container source-view (max-width: calc(var(--vcw-set-min-width) - 1px)) {
+    .cm-sizer {
+      min-width: 0;
+      width: 100cqi;
+      max-width: 100cqi;
+      margin: 0;
+    }
+    .cm-scroller {
+      padding-inline: clamp(8px, 2cqi, 16px) !important;
+    }
+    .cm-gutters {
+      margin-inline-start: 0;
+    }
+  }
+}

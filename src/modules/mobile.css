@@ -1,0 +1,13 @@
+/* Mobile: simple padding + table scroll */
+@media (max-width: 1023px) {
+  .markdown-preview-view,
+  .markdown-source-view.mod-cm6 {
+    padding-inline: clamp(16px, 4vw, 24px);
+  }
+  .markdown-rendered table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}

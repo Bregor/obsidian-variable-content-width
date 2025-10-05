@@ -1,0 +1,42 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, v* ]
+  pull_request:
+    branches: [ main, v* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build CSS
+      run: npm run build
+
+    - name: Check build output exists
+      run: |
+        if [ ! -f variable-content-width.css ]; then
+          echo "Error: Built CSS file not found"
+          exit 1
+        fi
+        echo "Build successful, file size: $(wc -c < variable-content-width.css) bytes"
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: css-build
+        path: variable-content-width.css
+        retention-days: 30

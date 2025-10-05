@@ -1,0 +1,36 @@
+/* Debug toggle (use class-toggle in Style Settings: vcw-set-debug) */
+body.vcw-set-debug .markdown-preview-view {
+  margin: 1px;
+  outline: 1px dashed red !important;
+}
+body.vcw-set-debug
+  .markdown-preview-view.is-readable-line-width
+  .markdown-preview-sizer {
+  outline: 1px solid blue !important;
+}
+
+body.vcw-set-debug .markdown-source-view {
+  margin: 1px;
+  outline: 1px dashed orange !important;
+}
+body.vcw-set-debug
+  .markdown-source-view.mod-cm6.is-readable-line-width
+  .cm-sizer {
+  outline: 1px solid green !important;
+}
+
+body.vcw-set-debug::after {
+  content: "🔍 VCW DEBUG:\A🔴 preview-view\A🔵 preview-readable\A🟠 source-view\A🟢 source-readable";
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 12px;
+  font: 12px/1.4 monospace;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: pre-line;
+  border-radius: 6px;
+  border: 1px solid #444;
+}

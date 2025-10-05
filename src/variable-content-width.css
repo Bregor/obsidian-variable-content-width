@@ -1,0 +1,19 @@
+/* ==========================================================================
+   Variable Content Width (VCW)
+   Version: 0.2.0-dev
+   Author: Maxim Filatov <pipopolam@gmail.com>
+   Purpose: Make Obsidian's content area width adaptive, configurable via
+            Style Settings plugin, and responsive to pane splits.
+   ==========================================================================
+*/
+
+@import "./modules/_vars.css";
+@import "./modules/_containers.css";
+
+@import "./modules/preview.css";
+@import "./modules/source.css";
+
+@import "./modules/mobile.css";
+@import "./modules/a11y.css";
+@import "./modules/print.css";
+@import "./modules/debug.css";

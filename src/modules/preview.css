@@ -1,0 +1,143 @@
+/* ==========================================================================
+   PREVIEW rules
+   Containers (defined in _containers.css):
+     - preview-view      → .markdown-preview-view (top level)
+     - preview-readable  → .markdown-preview-sizer (only when Readable Line Length is ON)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  /* Readable Line Length ON */
+
+  /*
+    When Readable line length is enabled, the sizer is a separate container.
+    Here we set the text column (min/ideal/max) and expose --file-line-width
+    for compatibility with themes/plugins.
+  */
+  @container preview-readable (min-width: 0) {
+    div.el-table {
+      margin-inline: var(--container-table-margin) !important;
+      max-width: var(--container-table-max-width);
+      min-width: var(--vcw-set-min-width);
+      width: var(--container-table-width);
+      padding-inline: 0 !important;
+    }
+    div.el-table > table {
+      margin-inline: var(--table-margin) !important;
+      max-width: var(--table-max-width);
+      min-width: var(--table-min-width);
+      table-layout: auto;
+      width: var(--table-width);
+      padding-inline: 0 !important;
+    }
+
+    div.el-h1 {
+      max-width: calc(100cqi / var(--vcw-set-h1-scale));
+      margin-inline: 0 !important;
+    }
+    div.el-h2 {
+      max-width: calc(100cqi / var(--vcw-set-h2-scale));
+      margin-inline: 0 !important;
+    }
+    div.el-h3 {
+      max-width: calc(100cqi / var(--vcw-set-h3-scale));
+      margin-inline: 0 !important;
+    }
+    div.callout {
+      max-width: calc(100cqi / var(--vcw-set-callout-scale));
+      margin-inline: 0 !important;
+    }
+  }
+
+  /* Readable Line Length OFF */
+
+  /*
+    No line length restrictions: we give symmetrical padding from the edges
+    so that the content does not "stick" to the edges of the panel.
+  */
+  @container preview-view (min-width: 0) {
+    .markdown-preview-view:not(.is-readable-line-width) {
+      padding-inline: max(
+        0px,
+        calc(
+          (
+              100cqi -
+                clamp(
+                  var(--vcw-set-min-width),
+                  var(--vcw-set-readable-width),
+                  var(--vcw-set-max-width)
+                )
+            ) /
+            2 * var(--vcw-set-padding-scale)
+        )
+      );
+    }
+  }
+
+  /* Panel-wide Breakpoints */
+
+  /* Medium and wide panels: center tables, no wider than columns. */
+  @container preview-view (min-width: 900px) {
+    .markdown-rendered table {
+      width: min(
+        100cqi,
+        clamp(
+          var(--vcw-set-min-width),
+          var(--vcw-set-readable-width),
+          var(--vcw-set-max-width)
+        )
+      );
+      margin-inline: auto;
+    }
+  }
+
+  /* Very wide panels: "wide" elements across the entire column. */
+  @container preview-view (min-width: 1200px) {
+    .markdown-rendered .mermaid,
+    .markdown-rendered .callout[data-callout="wide"],
+    .markdown-rendered .wide-content,
+    .markdown-rendered img[alt*="wide"] {
+      width: clamp(
+        var(--vcw-set-min-width),
+        var(--vcw-set-readable-width),
+        var(--vcw-set-max-width)
+      );
+      margin-inline: auto;
+    }
+
+    /* Center the code blocks without changing the line width. */
+    .markdown-rendered pre {
+      margin-inline: auto;
+    }
+  }
+
+  /* Narrow panel (vertical split < min-width) */
+
+  /*
+    If the container width is less than the declared minimum, remove strict
+    restrictions to avoid horizontal scrolling in the main column.
+  */
+  @container preview-view (max-width: calc(var(--vcw-set-min-width) - 1px)) {
+    .markdown-preview-sizer {
+      min-width: 0;
+      width: 100cqi;
+      max-width: 100cqi;
+      margin: 0;
+      padding-inline: clamp(8px, 2cqi, 16px);
+    }
+
+    /* Tables: allow them to expand within the container, wrap words. */
+    .markdown-rendered table {
+      width: 100cqi;
+      max-width: 100cqi;
+      margin-inline: 0;
+      table-layout: auto;
+      word-break: break-word;
+    }
+
+    /* Long code blocks: safe horizontal scrolling. */
+    .markdown-rendered pre {
+      max-width: 100cqi;
+      overflow-x: auto;
+    }
+  }
+}
