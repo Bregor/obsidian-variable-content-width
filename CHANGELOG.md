@@ -5,6 +5,31 @@ All notable changes to the Variable Content Width snippet will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - TBD
+
+### Changed
+- **Build System**: Migrated to PostCSS-based modular architecture
+  - Source files now organized in `src/modules/` directory
+  - Build process uses `postcss-import`, `postcss-nesting`, and `autoprefixer`
+  - Enables better code organization and maintainability
+  - Developers should use `npm run build` or `npm run watch` for development
+
+### Added
+- **CI/CD Pipeline**: GitHub Actions workflows for automated building and releases
+  - Build validation on every push/PR
+  - Automatic release creation when version tags are pushed
+  - Built CSS distributed via GitHub Releases, not committed to repository
+- **Release Script**: `npm run prepare-release` for streamlined version management
+- **Documentation**: Comprehensive guides for build system and release process
+
+### Technical
+- Source code split into focused modules: `_vars.css`, `_containers.css`, `preview.css`, `source.css`, `mobile.css`, `a11y.css`, `print.css`, `debug.css`
+- PostCSS nesting support for cleaner source code
+- Source maps generated for easier debugging (not included in distribution)
+- Built CSS removed from git tracking (`.gitignore`)
+- GitHub Actions workflows: `build.yml` and `release.yml`
+- Updated all documentation to reflect CI/CD workflow
+
 ## [0.1.0] - 2025-09-28
 
 ### Added

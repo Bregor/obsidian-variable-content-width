@@ -1,0 +1,6 @@
+# Dependencies
+node_modules
+
+# Build output (distributed via GitHub releases)
+/variable-content-width.css
+*.map

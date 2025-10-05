@@ -37,9 +37,11 @@ A sophisticated CSS snippet that makes Obsidian's content area width adaptive, c
 
 ### Installation
 
+#### For Users
+
 1. **Download the CSS file**:
-   - Download [`variable-content-width.css`](variable-content-width.css)
-   - Or copy the CSS content from the file
+   - Go to the [latest release](https://github.com/Bregor/obsidian-variable-content-width/releases/latest)
+   - Download `variable-content-width.css` from the release assets
 
 2. **Install in Obsidian**:
    - Open Obsidian Settings → Appearance → CSS Snippets
@@ -48,9 +50,38 @@ A sophisticated CSS snippet that makes Obsidian's content area width adaptive, c
    - Refresh the snippets list and enable "Variable Content Width"
 
 3. **Configure via Style Settings**:
-   - Install the Style Settings plugin if you haven't already
+   - Install the [Style Settings plugin](https://github.com/mgmeyers/obsidian-style-settings) if you haven't already
    - Go to Settings → Style Settings → Variable Content Width
    - Adjust settings to your preference
+
+#### For Developers
+
+If you want to modify the source code:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Bregor/obsidian-variable-content-width.git
+   cd obsidian-variable-content-width
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Build the CSS**:
+   ```bash
+   npm run build
+   ```
+
+   Or watch for changes during development:
+   ```bash
+   npm run watch
+   ```
+
+4. **Install in Obsidian**:
+   - Copy the built `variable-content-width.css` to your Obsidian snippets folder
+   - Or create a symlink for automatic updates during development
 
 ## Usage
 
@@ -166,8 +197,28 @@ The Variable Content Width snippet has been tested and verified to work seamless
 
 - **Efficient Selectors**: Minimal DOM traversal
 - **Hardware Acceleration**: Uses `transform` where beneficial
-- **Memory Footprint**: <10KB CSS, no JavaScript
+- **Memory Footprint**: ~45KB built CSS (modular source), no JavaScript
 - **Calculation Caching**: Browser optimizes `calc()` expressions
+
+### Build System
+
+The snippet uses PostCSS for building from modular source files:
+
+**Source Structure** (`src/`):
+- `variable-content-width.css` - Main entry point
+- `modules/_vars.css` - CSS variables and Style Settings schema
+- `modules/_containers.css` - Container query definitions
+- `modules/preview.css` - Preview mode styles
+- `modules/source.css` - Source/edit mode styles
+- `modules/mobile.css` - Mobile responsive styles
+- `modules/a11y.css` - Accessibility features
+- `modules/print.css` - Print/export optimizations
+- `modules/debug.css` - Debug mode visuals
+
+**PostCSS Pipeline**:
+- `postcss-import` - Module concatenation
+- `postcss-nesting` - Nested selector support
+- `autoprefixer` - Browser compatibility
 
 ### Architecture
 
@@ -244,22 +295,32 @@ This shows content boundaries to help troubleshoot layout issues.
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Quick Start for Contributors
 
 1. **Fork** this repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Test** your changes across different themes and screen sizes
-4. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-5. **Push** to the branch (`git push origin feature/amazing-feature`)
-6. **Open** a Pull Request
+2. **Clone** and install dependencies
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/obsidian-variable-content-width.git
+   cd obsidian-variable-content-width
+   npm install
+   ```
+3. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+4. **Make changes** to source files in `src/`
+5. **Build** and test (`npm run build` or `npm run watch`)
+6. **Test** your changes across different themes and screen sizes
+7. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+8. **Push** to the branch (`git push origin feature/amazing-feature`)
+9. **Open** a Pull Request
 
-### Development Setup
+### Development Workflow
 
-1. Clone the repository
-2. Make changes to `variable-content-width.css`
-3. Test in Obsidian with various themes and content types
-4. Ensure Style Settings integration works correctly
-5. Verify mobile responsiveness
+1. Edit source files in `src/modules/`
+2. Run `npm run watch` for automatic rebuilding
+3. Test in Obsidian (create a symlink to your snippets folder for live updates)
+4. Use debug mode (Style Settings → Variable Content Width → Debug → Enable debug mode)
+5. Verify changes work across themes and view modes
 
 ## License
 

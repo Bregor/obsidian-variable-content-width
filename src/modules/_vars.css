@@ -1,0 +1,166 @@
+/* -------------------------------
+   Root variables (Style Settings)
+   -------------------------------
+   These variables are controlled from the Style Settings plugin. Defaults
+   are provided here, but will be overwritten by user selections.
+*/
+:root {
+  --vcw-set-min-width: 720px; /* Smallest allowed width (readability floor) */
+  --vcw-set-readable-width: 85cqi; /* Ideal width (responsive, based on pane size) */
+  --vcw-set-max-width: 100cqi; /* Largest allowed width (full pane) */
+
+  --vcw-set-h1-scale: 1.2; /* H1 headings narrower: higher = narrower */
+  --vcw-set-h2-scale: 1.15; /* H2 headings slightly wider than H1 */
+  --vcw-set-h3-scale: 1.05; /* H3 headings slightly wider than H2 */
+
+  --vcw-set-callout-scale: 1.2; /* Callouts narrower than body text */
+  --vcw-set-padding-scale: 1; /* Multiplier for padding in wide mode */
+  --vcw-set-table-scale: 1; /* Multiplier for table width in wide mode */
+}
+
+/* -------------------------------
+   Body variables (Style Settings)
+   -------------------------------
+   These variables are here mostly for sake of minimal theme.
+*/
+body {
+  --content-margin: 0;
+  --container-table-margin: 0 !important;
+  --container-table-max-width: 100cqi;
+  --container-table-width: 100cqi;
+  --table-drag-handle-size: 16px;
+  --table-margin: 0 !important;
+  --table-max-width: 100cqi;
+  --table-min-width: var(--vcw-set-min-width);
+  --table-width: calc(100cqi / var(--vcw-set-table-scale));
+}
+
+/* ==========================================================================
+   STYLE SETTINGS SCHEMA
+   ========================================================================== */
+/* @settings
+name: Variable Content Width
+id: variable-content-width
+settings:
+  - id: vcw-main-heading
+    title: Content Width Settings
+    description: Configure how your content is displayed across different screen sizes
+    type: heading
+    level: 1
+
+  - id: vcw-set-readable-width
+    title: Readable width
+    description: "Main content width. Use 85cqi for responsive (recommended) or fixed px values like 800px. Note: cqi = container query inline units (% of pane width)"
+    type: variable-text
+    scope: root
+    default: 85cqi
+
+  - id: vcw-bounds-heading
+    title: Width Constraints
+    description: Set boundaries for your content width
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-min-width
+    title: Minimum width
+    description: "Smallest allowed width to maintain readability (e.g., 720px)"
+    type: variable-text
+    scope: root
+    default: 720px
+
+  - id: vcw-set-max-width
+    title: Maximum width
+    description: "Largest allowed width. Use 100cqi for full pane or px limit like 1200px"
+    type: variable-text
+    scope: root
+    default: 100cqi
+
+  - id: vcw-typography-heading
+    title: Typography (Experimental)
+    description: Control heading appearance and hierarchy
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-h1-scale
+    title: H1 width scale
+    description: "How much narrower H1 headings should be. Higher = narrower (1.2 ≈ 83% width)"
+    type: variable-number-slider
+    scope: root
+    default: 1.2
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-h2-scale
+    title: H2 width scale
+    description: "How much narrower H2 headings should be. Usually slightly wider than H1"
+    type: variable-number-slider
+    scope: root
+    default: 1.15
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-h3-scale
+    title: H3 width scale
+    description: "How much narrower H3 headings should be. Usually slightly wider than H2"
+    type: variable-number-slider
+    scope: root
+    default: 1.05
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-callout-scale
+    title: Callout width scale
+    description: "How much narrower callouts should be"
+    type: variable-number-slider
+    scope: root
+    default: 1.2
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-set-table-scale
+    title: Table width scale
+    description: "How much narrower tables should be"
+    type: variable-number-slider
+    scope: root
+    default: 1
+    min: 1
+    max: 2
+    step: 0.05
+
+  - id: vcw-advanced-heading
+    title: Advanced
+    description: Fine-tune spacing and layout behavior
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-padding-scale
+    title: Side padding multiplier
+    description: "Adjust side padding in wide mode (when readable line width is OFF). 0.5 = tighter, 1.5 = more spacious"
+    type: variable-number-slider
+    scope: root
+    default: 1
+    min: 0
+    max: 2
+    step: 0.1
+
+  - id: vcw-debug-heading
+    title: Debug
+    description: Visual debugging tools
+    type: heading
+    level: 2
+    collapsed: true
+
+  - id: vcw-set-debug
+    title: Enable debug mode
+    description: Show colored outlines around containers and display debug legend
+    type: class-toggle
+    scope: root
+    default: false
+*/

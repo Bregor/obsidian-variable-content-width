@@ -1,0 +1,88 @@
+@media (min-width: 1024px) {
+  /* === PREVIEW leaf === */
+  .workspace-split.mod-root
+    .workspace-leaf-content[data-type="markdown"][data-mode="preview"] {
+    .markdown-preview-view {
+      container-name: preview-view;
+      container-type: inline-size;
+      --file-line-width: clamp(
+        var(--vcw-set-min-width),
+        var(--vcw-set-readable-width),
+        var(--vcw-set-max-width)
+      ) !important;
+      --line-width: var(--file-line-width) !important;
+      --max-width: var(--file-line-width) !important;
+
+      &.is-readable-line-width .markdown-preview-sizer {
+        container-name: preview-readable;
+        container-type: inline-size;
+
+        /* sizer width calculation */
+        min-width: var(--vcw-set-min-width);
+        width: var(--vcw-set-readable-width);
+        max-width: var(--vcw-set-max-width);
+        margin-inline: auto;
+        padding-inline: 0;
+
+        --file-line-width: 100cqi !important;
+        --line-width: var(--file-line-width) !important;
+        --max-width: var(--file-line-width) !important;
+      }
+    }
+  }
+
+  /* === SOURCE leaf === */
+  .workspace-split.mod-root
+    .workspace-leaf-content[data-type="markdown"][data-mode="source"] {
+    .markdown-source-view.mod-cm6 {
+      container-name: source-view;
+      container-type: inline-size;
+      --file-line-width: clamp(
+        var(--vcw-set-min-width),
+        var(--vcw-set-readable-width),
+        var(--vcw-set-max-width)
+      ) !important;
+      --line-width: var(--file-line-width) !important;
+      --max-width: var(--file-line-width) !important;
+
+      &.is-readable-line-width .cm-sizer {
+        container-name: source-readable;
+        container-type: inline-size;
+
+        /* sizer width calculation */
+        min-width: var(--vcw-set-min-width);
+        width: var(--vcw-set-readable-width);
+        max-width: var(--vcw-set-max-width);
+        margin-inline: auto;
+
+        --file-line-width: 100cqi !important;
+        --line-width: var(--file-line-width) !important;
+        --max-width: var(--file-line-width) !important;
+        & .cm-content {
+          container-name: source-content;
+          container-type: inline-size;
+          --file-line-width: 100cqi !important;
+          --line-width: var(--file-line-width) !important;
+          --max-width: var(--file-line-width) !important;
+          --table-max-width: calc(
+            100cqi * var(--vcw-set-table-scale) -
+              var(--table-drag-handle-size) * 2
+          );
+          --table-width: var(--table-max-width);
+        }
+      }
+
+      &.is-readable-line-width .cm-scroller {
+        padding-inline: 0; /* remove double padding for some themes */
+      }
+    }
+  }
+
+  /* === CANVAS leaf === */
+  .workspace-split.mod-root
+    .workspace-leaf-content[data-type="canvas"]
+    .canvas-wrapper {
+    container-name: canvas-view;
+    container-type: inline-size;
+  }
+}
